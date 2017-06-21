@@ -17,6 +17,9 @@ xmlhttp.onreadystatechange = function() {
                         campo.setAttribute('onkeypress','mascara(this,cpf)');
                         campo.setAttribute('maxlength','14');
                     }
+                    else if(myObj.fields[i].name =="txtFullname"){
+                         campo.setAttribute('onkeypress','mascara(this,maskName)');
+                    }
                     campo.setAttribute('type',myObj.fields[i].type);
                   //  campo.setAttribute('type',myObj.fields[i].type);
                     campo.setAttribute('name',myObj.fields[i].name);
@@ -77,7 +80,6 @@ function inicilizarAutoComplete(){
             });
         });  
 }
-
 /* Inicializa o mapa de acordo com o que foi preenchido
 function initMap(latitude,longitude) {
         // Create a map object and specify the DOM element for display.
@@ -162,13 +164,14 @@ function save(){
     localStorage.setItem("complemento", complemento);
     localStorage.setItem("img", img);
 }
-
 // Mask Cpf - Regex
 function cpf(v){
     v=v.replace(/\D/g,"")                    //Remove tudo o que não é dígito
     v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
-    v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
-                                             
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos                                       
     v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
     return v
+}
+function maskName(v){
+    return v.replace(/([0-9])/g,"");
 }
