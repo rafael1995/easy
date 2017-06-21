@@ -13,8 +13,12 @@ xmlhttp.onreadystatechange = function() {
                     campo.setAttribute('id','row'+x);
                     criaCampo(campo);
                     var campo = document.createElement("input");
+                    if(myObj.fields[i].name =="txtCpf"){
+                        campo.setAttribute('onkeypress','mascara(this,cpf)');
+                        campo.setAttribute('maxlength','14');
+                    }
                     campo.setAttribute('type',myObj.fields[i].type);
-                    campo.setAttribute('type',myObj.fields[i].type);
+                  //  campo.setAttribute('type',myObj.fields[i].type);
                     campo.setAttribute('name',myObj.fields[i].name);
                     campo.setAttribute('id',myObj.fields[i].id);
                     campo.setAttribute('class','inputText');
@@ -56,6 +60,7 @@ function criaCampo(campo) {
      document.getElementById('form').appendChild(campo);
      inicilizarAutoComplete();
 }
+// Autocomplete Google
 function inicilizarAutoComplete(){
         google.maps.event.addDomListener(window, 'load', function () {
             var places = new google.maps.places.Autocomplete(document.getElementById('txtAddress'));
@@ -72,7 +77,8 @@ function inicilizarAutoComplete(){
             });
         });  
 }
-/* Inicializar mapa
+
+/* Inicializa o mapa de acordo com o que foi preenchido
 function initMap(latitude,longitude) {
         // Create a map object and specify the DOM element for display.
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -142,16 +148,13 @@ document.getElementById("usuario").onkeyup = function() {
 };
 
 function save(){
-    
    var name =  document.getElementById("txtFullname").value;
    var cpf =  document.getElementById("txtCpf").value; 
    var tel =  document.getElementById("txtTelefone").value; 
    var endereco =  document.getElementById("txtAddress").value;
    var complemento =  document.getElementById("txtComplement").value;
    var img =  document.getElementById("upload").value;
-
-
-
+   // Salvando dados do form - LocalStorage
     localStorage.setItem("name", name);
     localStorage.setItem("cpf", cpf);
     localStorage.setItem("tel", tel);
@@ -160,7 +163,12 @@ function save(){
     localStorage.setItem("img", img);
 }
 
-
-/* Salvando form no LocalStorage */
-
-// Check browser support
+// Mask Cpf - Regex
+function cpf(v){
+    v=v.replace(/\D/g,"")                    //Remove tudo o que não é dígito
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+    v=v.replace(/(\d{3})(\d)/,"$1.$2")       //Coloca um ponto entre o terceiro e o quarto dígitos
+                                             
+    v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2") //Coloca um hífen entre o terceiro e o quarto dígitos
+    return v
+}
