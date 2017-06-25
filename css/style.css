@@ -1,8 +1,11 @@
  /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
     body{
-     
+     background-color: #fff;
     } 
+    h4{
+      color: #26a69a;
+    }
      #map {
         height: 300px;
         width: 100%;
@@ -21,14 +24,17 @@
     .btn{
          line-height: 2;
     }
-input[type=text]{   
-    border-radius:4px;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    box-shadow: 1px 1px 2px #333333;    
-    -moz-box-shadow: 1px 1px 2px #333333;
-    -webkit-box-shadow: 1px 1px 2px #333333;
-    background: #cccccc; 
-    border:1px solid #000000;
-    width:150px
+
+#logo{
+  margin-top: 30px;
 }
+/* Esconde o input */
+input[type='file'] {
+  
+}
+
+#output_image
+{
+ max-width:300px;
+}
+
