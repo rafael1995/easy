@@ -10,7 +10,7 @@ function criaForm() {
                 place.innerHTML = myObj.fields[i].placeholder;
                 if ((myObj.fields[i].class == "input") && (myObj.fields[i].name != "btnSave")) {
                     var campo = document.createElement("div");
-                    campo.setAttribute('class', 'input-field');
+                    campo.setAttribute('class', 'input-field ');
                     campo.setAttribute('id', 'row' + x);
                     criaCampo(campo);
                     var campo = document.createElement("input");
@@ -19,6 +19,8 @@ function criaForm() {
                         campo.setAttribute('maxlength', '14');
                     } else if (myObj.fields[i].name == "txtFullname") {
                         campo.setAttribute('onkeypress', 'mascara(this,maskName)');
+                    } else if(myObj.fields[i].name == "txtTelephone"){
+                              campo.setAttribute('maxlength', '15');
                     }
                     campo.setAttribute('type', myObj.fields[i].type);
                     campo.setAttribute('required', 'required');
@@ -29,20 +31,34 @@ function criaForm() {
                     document.getElementById('row' + x).appendChild(place);
                 } else if (myObj.fields[i].class == "upload-button") {
                     var campo = document.createElement("div");
-                    campo.setAttribute('class', 'row');
+                    campo.setAttribute('class', 'row center btn row file-field input-field');
                     campo.setAttribute('id', 'row' + x);
                     criaCampo(campo);
                     campo = document.createElement("input");
                     campo.setAttribute('type', 'file');
+                    campo.setAttribute('onchange','loadFile(event)');
+                     campo.setAttribute('id','imgLoad');
+                    document.getElementById('row' + x).appendChild(campo);
+                    campo = document.createElement("span");
+                     campo.setAttribute('id', 'spanFile');
+                     document.getElementById('row' + x).appendChild(campo);
+                      document.getElementById("spanFile").innerHTML = 'File';
+                    x++;
+                    campo = document.createElement("div");
+                    campo.setAttribute('class', 'row center');
+                    campo.setAttribute('id', 'row' + x);
+                    criaCampo(campo);
+                    campo = document.createElement("img");
+                    campo.setAttribute('id', 'output');
                     document.getElementById('row' + x).appendChild(campo);
 
                 } else if (myObj.fields[i].name == "btnSave") {
                     var campo = document.createElement("div");
-                    campo.setAttribute('class', 'row');
+                    campo.setAttribute('class', 'row center');
                     campo.setAttribute('id', 'row' + x);
                     criaCampo(campo);
                     campo = document.createElement("a");
-                    campo.setAttribute('class', 'waves-effect waves-light btn');
+                    campo.setAttribute('class', 'waves-effect waves-light btn center');
                     campo.setAttribute('id', 'btnEnviar');
                     campo.setAttribute('onCLick', 'save();');
                     document.getElementById('row' + x).appendChild(campo);
@@ -61,12 +77,53 @@ function criaCampo(campo) {
     document.getElementById('form').appendChild(campo);
     inicilizarAutoComplete();
 }
+function save() {
+    // Verificando campos em branco
+    if(document.getElementById("txtFullname").value==""){
+         document.getElementById("txtFullname").focus();
+        Materialize.toast('Preencha o nome', 2000,'red');
+    }
+    else if(document.getElementById("txtCpf").value ==""){
+        Materialize.toast('Preencha o CPF', 1000);
+        document.getElementById("txtCpf").focus();
+    }
+    else if(TestaCPF(document.getElementById("txtCpf").value)==false){
+        Materialize.toast('Cpf Invalido', 1000,'red');
+        document.getElementById("txtCpf").focus();
+    }
+    else if(document.getElementById("txtTelefone").value ==""){
+        Materialize.toast('Preencha o Telefone', 1000);
+        document.getElementById("txtTelefone").focus();
+    }
+    else if(document.getElementById("txtAddress").value ==""){
+        Materialize.toast('Preencha o Endereço', 1000);
+        document.getElementById("txtAddress").focus();
+    }
+   
+    else{
+    var name = document.getElementById("txtFullname").value;
+    var cpf = document.getElementById("txtCpf").value;
+    var tel = document.getElementById("txtTelefone").value;
+    var endereco = document.getElementById("txtAddress").value;
+    var complemento = document.getElementById("txtComplement").value;
+    var img = document.getElementById("imgLoad").value;
+
+        localStorage.setItem("name", name);
+        localStorage.setItem("cpf", cpf);
+        localStorage.setItem("tel", tel);
+        localStorage.setItem("endereco", endereco);
+        localStorage.setItem("complemento", complemento);
+        localStorage.setItem("imgFile", img);
+        Materialize.toast('Dados salvos em LocalStorage !', 1000,'green');
+    }
+}
+
 // Autocomplete Google
 function inicilizarAutoComplete() {
     google.maps.event.addDomListener(window, 'load', function() {
         var places = new google.maps.places.Autocomplete(document.getElementById('txtAddress'));
         google.maps.event.addListener(places, 'place_changed', function() {
-            var place = places.getPlace();
+           // var place = places.getPlace();
             var address = place.formatted_address;
             var latitude = place.geometry.location.lat();
             var longitude = place.geometry.location.lng();
@@ -97,16 +154,17 @@ var loadFile = function(event) {
     };
     reader.readAsDataURL(event.target.files[0]);
 };
+
+
 function mascara(o, f) {
     v_obj = o
     v_fun = f
     setTimeout("execmascara()", 1)
 }
-
 function execmascara() {
     v_obj.value = v_fun(v_obj.value)
 }
-
+// Mascarando telefone - REGEX
 function mtel(v) {
     v = v.replace(/\D/g, ""); //Remove tudo o que n?o ? d?gito
     v = v.replace(/^(\d{2})(\d)/g, "($1) $2"); //Coloca par?nteses em volta dos dois primeiros d?gitos
@@ -121,31 +179,16 @@ function id(el) {
 function initMask() {
     id('txtTelefone').onkeyup = function() {
         mascara(this, mtel);
-    }
-       document.getElementById("usuario").onkeyup = function() {
-        this.value = this.value.replace(/[^\w\.]|\d/g, '');
-    };
+    }   
 }
+document.getElementById("usuario").onkeyup = function() {
+        this.value = this.value.replace(/[^\w\.]|\d/g, '');
+};
 
 
-
-function save() {
-    var name = document.getElementById("txtFullname").value;
-    var cpf = document.getElementById("txtCpf").value;
-    var tel = document.getElementById("txtTelefone").value;
-    var endereco = document.getElementById("txtAddress").value;
-    var complemento = document.getElementById("txtComplement").value;
-    //var img = document.getElementById("upload").value;
-
-    
-    // Salvando dados do form - LocalStorage
-    localStorage.setItem("name", name);
-    localStorage.setItem("cpf", cpf);
-    localStorage.setItem("tel", tel);
-    localStorage.setItem("endereco", endereco);
-    localStorage.setItem("complemento", complemento);
-  //  localStorage.setItem("img", img);
-    Materialize.toast('I am a toast!', 1000);
+function verificaName(name){
+    var VerName = /^[a-zA-Z-' ]+$/.test(name);
+    return VerName;
 }
 // Mask Cpf - Regex
 function cpf(v) {
@@ -168,4 +211,30 @@ function preview_image(event)
   output.src = reader.result;
  }
  reader.readAsDataURL(event.target.files[0]);
+}
+
+// Validando Cpf
+function TestaCPF(strCPF) {
+    strCPF = strCPF.replace(".", "");
+    strCPF = strCPF.replace(".", "");
+    strCPF = strCPF.replace("-", "");
+    
+    var Soma;
+    var Resto;
+    Soma = 0;
+	if (strCPF == "00000000000") return false;
+    
+	for (i=1; i<=9; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (11 - i);
+	Resto = (Soma * 10) % 11;
+	
+    if ((Resto == 10) || (Resto == 11))  Resto = 0;
+    if (Resto != parseInt(strCPF.substring(9, 10)) ) return false;
+	
+	Soma = 0;
+    for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (12 - i);
+    Resto = (Soma * 10) % 11;
+	
+    if ((Resto == 10) || (Resto == 11))  Resto = 0;
+    if (Resto != parseInt(strCPF.substring(10, 11) ) ) return false;
+    return true;
 }

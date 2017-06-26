@@ -4,7 +4,7 @@
      background-color: #fff;
     } 
     h4{
-      color: #26a69a;
+      color: #4e3c88;
     }
      #map {
         height: 300px;
@@ -28,13 +28,47 @@
 #logo{
   margin-top: 30px;
 }
+
+.contForm{
+    width: 50%;
+}
 /* Esconde o input */
 input[type='file'] {
   
 }
-
+#txtAddress::placeholder {
+  color: #fff;
+}
 #output_image
 {
  max-width:300px;
 }
+#row9{
+  margin-bottom: 63px;
+}
+@media only screen and (min-width : 601px) and (max-width : 1260px) {
+.toast {
+width: 100%;
+border-radius: 0;} }
+
+@media only screen and (min-width : 1261px) {
+.toast {
+width: 100%;
+border-radius: 0; } }
+
+@media only screen and (min-width : 601px) and (max-width : 1260px) {
+#toast-container {
+min-width: 100%;
+bottom:90%;
+top: 0%;
+right: 0%;
+left: 0%;} }
+
+@media only screen and (min-width : 1261px) {
+#toast-container {
+min-width: 100%;
+bottom: 90%;
+top: 0%;
+right: 0%;
+left: 0%; } }
 

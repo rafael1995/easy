@@ -32,7 +32,7 @@
 			"value": "",
 			"type": "text",
 			"class": "input",
-			"placeholder":"Endereço"
+			"placeholder":"Endereco"
 		},
 		"map": {
 			"name": "mapRenderer",
