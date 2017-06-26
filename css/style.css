@@ -32,10 +32,7 @@
 .contForm{
     width: 50%;
 }
-/* Esconde o input */
-input[type='file'] {
-  
-}
+
 #txtAddress::placeholder {
   color: #fff;
 }
